@@ -8,7 +8,8 @@ public class SimulationConfig {
 
     public Config load() {
         try {
-            InputStream inputStream = new FileInputStream("src/main/resources/parametres.properties");
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream inputStream = classloader.getResourceAsStream("parametres.properties");
             Properties properties = new Properties();
             properties.load(inputStream);
             double PROBA = Double.parseDouble(properties.getProperty("simulation.proba"));

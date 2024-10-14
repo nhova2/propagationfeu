@@ -55,22 +55,32 @@ public class SimulationFeu {
     * l'état de moveForward permet de propager le feu ou pas
     * */
     public void simulate(){
+        int ENFEU_TEMP = 0;
         while(true) {
             boolean moveForward = false;
             for (int i = 0; i < dimensionH; i++) {
                 for (int j = 0; j < dimensionL; j++) {
-                    if (this.grid[i][j] != ENFEU) {
+                    if (this.grid[i][j] == ENFEU) {
                         this.grid[i][j] = CENDRE;
-                        moveForward = true;
                         propagateFire(this.grid, i, j);
-
+                        moveForward = true;
+                    }else if (this.grid[i][j] == FORET){
+                        moveForward = false;
                     }else{
                         moveForward = false;
                     }
                 }
             }
+            for (int i = 0; i < dimensionH; i++) {
+                for (int j = 0; j < dimensionL; j++) {
+                    if (this.grid[i][j] == ENFEU) {
+                        moveForward = true;
+                    }
+                }
+            }
             if(!moveForward) break;
         }
+
     }
 
     /*
@@ -85,11 +95,12 @@ public class SimulationFeu {
         for (int[] dir : directions) {
             int nx = i + dir[0];
             int ny = j + dir[1];
-            if (nx >= 0 && nx < dimensionH && ny >= 0 && ny < dimensionL && grid[nx][ny] != ENFEU) {
+            if (nx >= 0 && nx < dimensionH && ny >= 0 && ny < dimensionL && grid[nx][ny] != ENFEU  && grid[nx][ny] != CENDRE) {
                 if (random.nextDouble() < PROBA) {
                     grid[nx][ny] = ENFEU;
                 }
             }
+            printGrid();
         }
     }
 
